@@ -1,757 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Creative Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --skate: #7dd8f8;
-      --art: #ff6b35;
-      --pottery: #c9a87c;
-      --dark: #0d0d0d;
-      --mid: #1a1a1a;
-      --light: #f5f0e8;
-      --white: #ffffff;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--dark);
-      color: var(--light);
-      font-family: 'Space Mono', monospace;
-      overflow-x: hidden;
-      cursor: none;
-    }
-
-    /* Custom cursor */
-    .cursor {
-      width: 16px; height: 16px;
-      border: 2px solid var(--skate);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      transition: transform 0.1s ease, border-color 0.3s;
-      transform: translate(-50%, -50%);
-    }
-    .cursor-dot {
-      width: 4px; height: 4px;
-      background: var(--skate);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: background 0.3s;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 3rem;
-      background: rgba(13,13,13,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(125,216,248,0.12);
-    }
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.6rem;
-      letter-spacing: 0.1em;
-      color: var(--skate);
-    }
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-    .nav-links a {
-      text-decoration: none;
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--light);
-      opacity: 0.7;
-      transition: opacity 0.2s, color 0.2s;
-    }
-    .nav-links a:hover { opacity: 1; color: var(--skate); }
-
-    /* HERO */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 6rem 3rem 3rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 20% 50%, rgba(125,216,248,0.09) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 20%, rgba(180,230,255,0.06) 0%, transparent 50%);
-    }
-    .hero-grid {
-      position: absolute; inset: 0;
-      background-image: linear-gradient(rgba(125,216,248,0.04) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(125,216,248,0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
-    }
-    .hero-tag {
-      font-size: 0.7rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--skate);
-      opacity: 0.8;
-      margin-bottom: 1.2rem;
-      animation: fadeUp 0.8s ease 0.2s both;
-    }
-    .hero-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(5rem, 14vw, 13rem);
-      line-height: 0.9;
-      letter-spacing: -0.01em;
-      color: var(--white);
-      animation: fadeUp 0.8s ease 0.4s both;
-    }
-    .hero-title span { color: var(--skate); }
-    .hero-sub {
-      font-family: 'DM Serif Display', serif;
-      font-style: italic;
-      font-size: clamp(1rem, 2.5vw, 1.6rem);
-      color: var(--light);
-      opacity: 0.6;
-      margin-top: 1.5rem;
-      max-width: 480px;
-      animation: fadeUp 0.8s ease 0.6s both;
-    }
-    .hero-chips {
-      display: flex; gap: 1rem; flex-wrap: wrap;
-      margin-top: 2.5rem;
-      animation: fadeUp 0.8s ease 0.8s both;
-    }
-    .chip {
-      padding: 0.5rem 1.2rem;
-      border-radius: 100px;
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      border: 1.5px solid;
-      transition: background 0.2s, color 0.2s;
-    }
-    .chip-skate { border-color: var(--skate); color: var(--skate); }
-    .chip-skate:hover { background: var(--skate); color: var(--dark); }
-    .chip-art { border-color: var(--art); color: var(--art); }
-    .chip-art:hover { background: var(--art); color: var(--white); }
-    .chip-pottery { border-color: var(--pottery); color: var(--pottery); }
-    .chip-pottery:hover { background: var(--pottery); color: var(--dark); }
-
-    .scroll-hint {
-      position: absolute;
-      bottom: 2.5rem; left: 3rem;
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--light);
-      opacity: 0.35;
-      display: flex; align-items: center; gap: 0.8rem;
-      animation: fadeUp 1s ease 1.2s both;
-    }
-    .scroll-line {
-      width: 40px; height: 1px;
-      background: var(--light);
-      opacity: 0.35;
-      animation: lineGrow 1.5s ease 1.5s both;
-    }
-    @keyframes lineGrow {
-      from { width: 0; } to { width: 40px; }
-    }
-
-    /* SECTIONS */
-    section.panel {
-      min-height: 100vh;
-      padding: 6rem 3rem;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .section-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 10rem;
-      position: absolute;
-      right: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      opacity: 0.04;
-      color: var(--white);
-      line-height: 1;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .section-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      margin-bottom: 0.8rem;
-    }
-    .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3.5rem, 8vw, 7rem);
-      line-height: 0.95;
-      margin-bottom: 2rem;
-    }
-    .section-body {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(1rem, 1.8vw, 1.25rem);
-      line-height: 1.75;
-      max-width: 520px;
-      opacity: 0.8;
-    }
-
-    /* SKATE */
-    #skating {
-      background: #080d10;
-      border-top: 1px solid rgba(125,216,248,0.1);
-    }
-    #skating .section-label { color: var(--skate); }
-    #skating .section-title { color: var(--skate); }
-    .skate-ticker {
-      overflow: hidden;
-      white-space: nowrap;
-      margin: 3rem -3rem;
-      padding: 1rem 0;
-      border-top: 1px solid rgba(125,216,248,0.15);
-      border-bottom: 1px solid rgba(125,216,248,0.15);
-    }
-    .skate-ticker-inner {
-      display: inline-block;
-      animation: ticker 18s linear infinite;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem;
-      letter-spacing: 0.15em;
-      color: var(--skate);
-      opacity: 0.5;
-    }
-    @keyframes ticker {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
-    }
-    .skate-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.2rem;
-      margin-top: 2.5rem;
-      max-width: 700px;
-    }
-    .skate-card {
-      background: rgba(125,216,248,0.05);
-      border: 1px solid rgba(125,216,248,0.15);
-      border-radius: 8px;
-      padding: 1.5rem;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .skate-card:hover {
-      background: rgba(125,216,248,0.1);
-      transform: translateY(-4px);
-    }
-    .skate-card-icon { font-size: 2rem; margin-bottom: 0.6rem; }
-    .skate-card-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.2rem;
-      color: var(--skate);
-      letter-spacing: 0.08em;
-    }
-    .skate-card-body {
-      font-size: 0.78rem;
-      line-height: 1.6;
-      opacity: 0.6;
-      margin-top: 0.3rem;
-    }
-
-    /* ART */
-    #art {
-      background: #110d0a;
-      border-top: 1px solid rgba(255,107,53,0.1);
-    }
-    #art .section-label { color: var(--art); }
-    #art .section-title { color: var(--art); }
-    .art-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(2, 160px);
-      gap: 0.8rem;
-      margin-top: 2.5rem;
-      max-width: 560px;
-    }
-    .art-block {
-      border-radius: 6px;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.3s;
-    }
-    .art-block:hover { transform: scale(1.03); }
-    .art-block:nth-child(1) {
-      grid-column: 1 / 3;
-      background: linear-gradient(135deg, #3d1c08, #7a2f0e);
-    }
-    .art-block:nth-child(2) {
-      background: linear-gradient(135deg, #1a0f2e, #4a1f6a);
-    }
-    .art-block:nth-child(3) {
-      background: linear-gradient(135deg, #0a1f1a, #1a5c40);
-    }
-    .art-block:nth-child(4) {
-      background: linear-gradient(135deg, #2e1f0a, #6b4a15);
-    }
-    .art-block:nth-child(5) {
-      grid-column: 2 / 4;
-      background: linear-gradient(135deg, #1a0a0a, #5c1a1a);
-    }
-    .art-block-label {
-      position: absolute;
-      bottom: 0.8rem; left: 0.9rem;
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--white);
-      opacity: 0.6;
-    }
-    /* SVG art placeholders */
-    .art-svg {
-      width: 100%; height: 100%;
-    }
-
-    /* POTTERY */
-    #pottery {
-      background: #0e0c09;
-      border-top: 1px solid rgba(201,168,124,0.15);
-    }
-    #pottery .section-label { color: var(--pottery); }
-    #pottery .section-title { color: var(--pottery); }
-    .pottery-showcase {
-      display: flex;
-      gap: 2rem;
-      margin-top: 2.5rem;
-      align-items: flex-end;
-      flex-wrap: wrap;
-    }
-    .pottery-piece {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.7rem;
-      transition: transform 0.3s;
-    }
-    .pottery-piece:hover { transform: translateY(-6px); }
-    .pottery-piece-name {
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--pottery);
-      opacity: 0.7;
-    }
-    .pottery-desc {
-      font-size: 0.68rem;
-      text-align: center;
-      opacity: 0.45;
-      max-width: 110px;
-      line-height: 1.5;
-    }
-
-    /* ABOUT / CONTACT */
-    #about {
-      min-height: 60vh;
-      background: var(--dark);
-      border-top: 1px solid rgba(255,255,255,0.07);
-      padding: 6rem 3rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .about-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 6vw, 5.5rem);
-      color: var(--white);
-      line-height: 0.95;
-      margin-bottom: 1.5rem;
-    }
-    .about-body {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.1rem;
-      line-height: 1.8;
-      max-width: 560px;
-      opacity: 0.7;
-      margin-bottom: 2rem;
-    }
-    .contact-link {
-      display: inline-block;
-      padding: 0.9rem 2.2rem;
-      background: var(--skate);
-      color: var(--dark);
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      text-decoration: none;
-      font-weight: 700;
-      border-radius: 2px;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .contact-link:hover { background: var(--white); transform: translateY(-2px); }
-
-    /* FOOTER */
-    footer {
-      padding: 2rem 3rem;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      opacity: 0.35;
-    }
-
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(36px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* noise overlay */
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      opacity: 0.25;
-      z-index: 999;
-    }
-
-    /* Responsive */
-    @media (max-width: 600px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { gap: 1.2rem; }
-      section.panel, #hero, #about { padding: 5rem 1.5rem 3rem; }
-      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
-      .art-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-      .art-block:nth-child(1), .art-block:nth-child(5) { grid-column: auto; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Creative Portfolio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f7f7fb;
+            color: #333;
+        }
+        header {
+            background-color: #6a5acd;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        section {
+            padding: 20px;
+        }
+        h2 {
+            border-bottom: 2px solid #6a5acd;
+            padding-bottom: 5px;
+        }
+        .entry {
+            background: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #6a5acd;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-dot" id="cursorDot"></div>
+<header>
+    <h1>My Creative Portfolio</h1>
+    <p>Art • Ice Skating • Pottery</p>
+</header>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">Portfolio</div>
-    <ul class="nav-links">
-      <li><a href="#skating">Skating</a></li>
-      <li><a href="#art">Art</a></li>
-      <li><a href="#pottery">Pottery</a></li>
-      <li><a href="#about">About</a></li>
-    </ul>
-  </nav>
+<nav>
+    <a href="#art">Art</a>
+    <a href="#skating">Ice Skating</a>
+    <a href="#pottery">Pottery</a>
+</nav>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-grid"></div>
-    <div class="hero-tag">10th Grade Creative Portfolio</div>
-    <h1 class="hero-title">MY<br><span>CREATIVE</span><br>WORLD</h1>
-    <p class="hero-sub">Ice Skater. Artist. Potter. Three passions, one story.</p>
-    <div class="hero-chips">
-      <a href="#skating" class="chip chip-skate">⛸️ Ice Skating</a>
-      <a href="#art" class="chip chip-art">🎨 Art</a>
-      <a href="#pottery" class="chip chip-pottery">🏺 Pottery</a>
-    </div>
-    <div class="scroll-hint">
-      <div class="scroll-line"></div>
-      Scroll to explore
-    </div>
-  </section>
+<section id="art">
+    <h2>🎨 Art</h2>
 
-  <!-- SKATING -->
-  <section id="skating" class="panel">
-    <div class="section-num">01</div>
-    <div class="reveal">
-      <div class="section-label">Section 01 — On the Ice</div>
-      <h2 class="section-title">ICE SKATING</h2>
-      <p class="section-body">
-        Ice skating is where I feel most alive. From my first shaky steps on the rink
-        to landing spins and learning footwork sequences, every session on the ice
-        teaches me something new about balance, persistence, and grace under pressure.
-      </p>
+    <!-- Example Entry -->
+    <div class="entry">
+        <h3>March 20, 2026</h3>
+        <p>Watercolor landscape inspired by spring colors.</p>
+        <a href="art/march-20-2026.html">View Details</a>
     </div>
 
-    <div class="skate-ticker">
-      <span class="skate-ticker-inner">
-        AXEL &nbsp;·&nbsp; LUTZ &nbsp;·&nbsp; SPIN &nbsp;·&nbsp; CAMEL &nbsp;·&nbsp; SPIRAL &nbsp;·&nbsp;
-        FOOTWORK &nbsp;·&nbsp; CROSSOVERS &nbsp;·&nbsp; BACK EDGE &nbsp;·&nbsp; SALCHOW &nbsp;·&nbsp; TOE LOOP &nbsp;·&nbsp;
-        AXEL &nbsp;·&nbsp; LUTZ &nbsp;·&nbsp; SPIN &nbsp;·&nbsp; CAMEL &nbsp;·&nbsp; SPIRAL &nbsp;·&nbsp;
-        FOOTWORK &nbsp;·&nbsp; CROSSOVERS &nbsp;·&nbsp; BACK EDGE &nbsp;·&nbsp; SALCHOW &nbsp;·&nbsp; TOE LOOP &nbsp;·&nbsp;
-      </span>
+    <!-- Add more entries below -->
+</section>
+
+<section id="skating">
+    <h2>⛸️ Ice Skating</h2>
+
+    <div class="entry">
+        <h3>March 18, 2026</h3>
+        <p>Practiced spins and footwork routine.</p>
+        <a href="skating/march-18-2026.html">View Details</a>
     </div>
 
-    <div class="skate-cards reveal">
-      <div class="skate-card">
-        <div class="skate-card-icon">⛸️</div>
-        <div class="skate-card-title">Freestyle</div>
-        <div class="skate-card-body">Working on jumps and spins — every landing is a small victory earned through hours of practice.</div>
-      </div>
-      <div class="skate-card">
-        <div class="skate-card-icon">🎵</div>
-        <div class="skate-card-title">Programs</div>
-        <div class="skate-card-body">Choreographing routines to music and performing them in competitions and shows.</div>
-      </div>
-      <div class="skate-card">
-        <div class="skate-card-icon">🏅</div>
-        <div class="skate-card-title">Competing</div>
-        <div class="skate-card-body">Stepping onto the ice in front of judges — nerves, adrenaline, and the joy of sharing my skating.</div>
-      </div>
-    </div>
-  </section>
+    <!-- Add more entries below -->
+</section>
 
-  <!-- ART -->
-  <section id="art" class="panel">
-    <div class="section-num">02</div>
-    <div class="reveal">
-      <div class="section-label">Section 02 — On Canvas</div>
-      <h2 class="section-title">ART</h2>
-      <p class="section-body">
-        From charcoal sketches to digital pieces, art is where my inner world
-        meets the outer one. I explore color, shadow, and emotion — often inspired
-        by skate culture, nature, and the details people walk past every day.
-      </p>
+<section id="pottery">
+    <h2>🏺 Pottery</h2>
+
+    <div class="entry">
+        <h3>March 15, 2026</h3>
+        <p>Created a clay bowl with textured design.</p>
+        <a href="pottery/march-15-2026.html">View Details</a>
     </div>
 
-    <div class="art-grid reveal">
-      <div class="art-block">
-        <svg class="art-svg" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="g1" cx="30%" cy="40%">
-              <stop offset="0%" stop-color="#ff6b35" stop-opacity="0.6"/>
-              <stop offset="100%" stop-color="#3d1c08" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-          <rect width="300" height="160" fill="#3d1c08"/>
-          <circle cx="80" cy="80" r="100" fill="url(#g1)"/>
-          <line x1="0" y1="160" x2="300" y2="0" stroke="#ff6b35" stroke-width="0.5" opacity="0.3"/>
-          <line x1="0" y1="120" x2="300" y2="40" stroke="#ff6b35" stroke-width="0.5" opacity="0.2"/>
-          <circle cx="120" cy="70" r="30" fill="none" stroke="#ff6b35" stroke-width="1" opacity="0.4"/>
-          <circle cx="120" cy="70" r="15" fill="#ff6b35" opacity="0.15"/>
-        </svg>
-        <div class="art-block-label">Abstract Studies</div>
-      </div>
-      <div class="art-block">
-        <svg class="art-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-          <rect width="160" height="160" fill="#1a0f2e"/>
-          <polygon points="80,20 140,140 20,140" fill="none" stroke="#b060ff" stroke-width="1" opacity="0.5"/>
-          <polygon points="80,40 120,130 40,130" fill="none" stroke="#b060ff" stroke-width="0.7" opacity="0.3"/>
-          <circle cx="80" cy="80" r="8" fill="#b060ff" opacity="0.6"/>
-        </svg>
-        <div class="art-block-label">Geometry</div>
-      </div>
-      <div class="art-block">
-        <svg class="art-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-          <rect width="160" height="160" fill="#0a1f1a"/>
-          <path d="M 20 140 Q 60 20 80 80 Q 100 140 140 20" stroke="#40c080" stroke-width="1.5" fill="none" opacity="0.7"/>
-          <path d="M 10 100 Q 80 50 150 100" stroke="#40c080" stroke-width="0.8" fill="none" opacity="0.3"/>
-          <circle cx="80" cy="80" r="40" fill="none" stroke="#40c080" stroke-width="0.5" stroke-dasharray="4 4" opacity="0.3"/>
-        </svg>
-        <div class="art-block-label">Line Work</div>
-      </div>
-      <div class="art-block">
-        <svg class="art-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-          <rect width="160" height="160" fill="#2e1f0a"/>
-          <rect x="30" y="30" width="100" height="100" rx="4" fill="#6b4a15" opacity="0.5"/>
-          <rect x="50" y="50" width="60" height="60" rx="4" fill="#c97a30" opacity="0.35"/>
-          <rect x="68" y="68" width="24" height="24" rx="2" fill="#f0a050" opacity="0.6"/>
-        </svg>
-        <div class="art-block-label">Composition</div>
-      </div>
-      <div class="art-block">
-        <svg class="art-svg" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
-          <rect width="300" height="160" fill="#1a0a0a"/>
-          <defs>
-            <radialGradient id="g2" cx="60%" cy="50%">
-              <stop offset="0%" stop-color="#ff3030" stop-opacity="0.5"/>
-              <stop offset="100%" stop-color="#1a0a0a" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-          <rect width="300" height="160" fill="url(#g2)"/>
-          <path d="M0 80 Q75 30 150 80 Q225 130 300 80" stroke="#ff6060" stroke-width="1.5" fill="none" opacity="0.7"/>
-          <path d="M0 100 Q75 50 150 100 Q225 150 300 100" stroke="#ff4040" stroke-width="0.8" fill="none" opacity="0.4"/>
-        </svg>
-        <div class="art-block-label">Digital Paintings</div>
-      </div>
-    </div>
-  </section>
+    <!-- Add more entries below -->
+</section>
 
-  <!-- POTTERY -->
-  <section id="pottery" class="panel">
-    <div class="section-num">03</div>
-    <div class="reveal">
-      <div class="section-label">Section 03 — On the Wheel</div>
-      <h2 class="section-title">POTTERY</h2>
-      <p class="section-body">
-        There's something grounding about working with clay. Pottery forces you
-        to slow down, feel the material, and trust the process. Every piece is
-        unique — shaped by hands, fire, and a little bit of chance.
-      </p>
-    </div>
+<footer>
+    <p>© 2026 My Portfolio</p>
+</footer>
 
-    <div class="pottery-showcase reveal">
-
-      <!-- Bowl SVG -->
-      <div class="pottery-piece">
-        <svg width="100" height="120" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="bowl-g" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#c9a87c"/>
-              <stop offset="100%" stop-color="#7a5c38"/>
-            </linearGradient>
-          </defs>
-          <path d="M15 40 Q50 100 85 40" stroke="url(#bowl-g)" stroke-width="3" fill="url(#bowl-g)" fill-opacity="0.15"/>
-          <ellipse cx="50" cy="40" rx="35" ry="8" fill="none" stroke="#c9a87c" stroke-width="2" opacity="0.7"/>
-          <line x1="30" y1="105" x2="70" y2="105" stroke="#c9a87c" stroke-width="2" opacity="0.4"/>
-          <path d="M15 40 Q50 100 85 40" stroke="#7a5c38" stroke-width="1" fill="none" opacity="0.4"/>
-        </svg>
-        <div class="pottery-piece-name">Ceramic Bowl</div>
-        <div class="pottery-desc">Hand-thrown, matte glaze finish</div>
-      </div>
-
-      <!-- Tall Vase SVG -->
-      <div class="pottery-piece">
-        <svg width="80" height="160" viewBox="0 0 80 160" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="vase-g" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="#8b6340"/>
-              <stop offset="50%" stop-color="#c9a87c"/>
-              <stop offset="100%" stop-color="#8b6340"/>
-            </linearGradient>
-          </defs>
-          <path d="M28 20 Q10 60 15 100 Q18 140 40 150 Q62 140 65 100 Q70 60 52 20 Z"
-                fill="url(#vase-g)" fill-opacity="0.25" stroke="url(#vase-g)" stroke-width="2"/>
-          <ellipse cx="40" cy="20" rx="12" ry="4" fill="none" stroke="#c9a87c" stroke-width="1.5" opacity="0.8"/>
-          <path d="M28 20 Q26 60 30 100" stroke="#c9a87c" stroke-width="0.7" fill="none" opacity="0.3"/>
-        </svg>
-        <div class="pottery-piece-name">Tall Vase</div>
-        <div class="pottery-desc">Wheel-thrown with carved texture</div>
-      </div>
-
-      <!-- Mug SVG -->
-      <div class="pottery-piece">
-        <svg width="110" height="110" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="mug-g" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#b08050"/>
-              <stop offset="100%" stop-color="#6b4020"/>
-            </linearGradient>
-          </defs>
-          <rect x="15" y="25" width="55" height="70" rx="4" fill="url(#mug-g)" fill-opacity="0.2" stroke="#c9a87c" stroke-width="2"/>
-          <path d="M70 40 Q95 40 95 65 Q95 85 70 85" fill="none" stroke="#c9a87c" stroke-width="2.5"/>
-          <ellipse cx="42" cy="25" rx="27" ry="6" fill="none" stroke="#c9a87c" stroke-width="1.5" opacity="0.6"/>
-          <line x1="25" y1="45" x2="60" y2="45" stroke="#c9a87c" stroke-width="0.8" opacity="0.3"/>
-          <line x1="25" y1="60" x2="60" y2="60" stroke="#c9a87c" stroke-width="0.8" opacity="0.3"/>
-        </svg>
-        <div class="pottery-piece-name">Handmade Mug</div>
-        <div class="pottery-desc">Slip-glazed, kiln fired</div>
-      </div>
-
-      <!-- Small dish -->
-      <div class="pottery-piece">
-        <svg width="90" height="60" viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="dish-g" cx="50%" cy="30%">
-              <stop offset="0%" stop-color="#d4b080"/>
-              <stop offset="100%" stop-color="#7a5c38"/>
-            </radialGradient>
-          </defs>
-          <path d="M5 30 Q45 65 85 30" stroke="#c9a87c" stroke-width="2" fill="url(#dish-g)" fill-opacity="0.18"/>
-          <ellipse cx="45" cy="30" rx="40" ry="9" fill="none" stroke="#c9a87c" stroke-width="1.5" opacity="0.6"/>
-          <ellipse cx="45" cy="52" rx="20" ry="4" fill="none" stroke="#c9a87c" stroke-width="1" opacity="0.3"/>
-        </svg>
-        <div class="pottery-piece-name">Trinket Dish</div>
-        <div class="pottery-desc">Slab-built, hand-painted</div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="about-title reveal">HEY,<br>I'M A CREATOR.</div>
-    <p class="about-body reveal">
-      I'm a 10th grader who lives at the intersection of movement, art, and craft.
-      Whether I'm gliding on the ice, behind a canvas, or centering clay on a wheel,
-      I'm always making something. This portfolio is a snapshot of who I am and
-      where I'm headed.
-    </p>
-    <a href="/cdn-cgi/l/email-protection#b9d1dcd5d5d6f9d4c0c9d6cbcddfd6d5d0d697dad6d4" class="contact-link reveal">Get In Touch →</a>
-  </section>
-
-  <footer>
-    <span>© 2026 My Creative Portfolio</span>
-    <span>Ice Skater · Artist · Potter</span>
-  </footer>
-
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    // Custom cursor
-    const cursor = document.getElementById('cursor');
-    const dot = document.getElementById('cursorDot');
-    let mx = 0, my = 0, cx = 0, cy = 0;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-    (function animCursor() {
-      cx += (mx - cx) * 0.18;
-      cy += (my - cy) * 0.18;
-      cursor.style.left = cx + 'px';
-      cursor.style.top = cy + 'px';
-      dot.style.left = mx + 'px';
-      dot.style.top = my + 'px';
-      requestAnimationFrame(animCursor);
-    })();
-
-    // Section color theming for cursor
-    const sections = {
-      skating: '#7dd8f8',
-      art: '#ff6b35',
-      pottery: '#c9a87c',
-      hero: '#7dd8f8',
-      about: '#ffffff'
-    };
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const col = sections[e.target.id] || '#f0ff3c';
-          cursor.style.borderColor = col;
-          dot.style.background = col;
-        }
-      });
-    }, { threshold: 0.4 });
-    document.querySelectorAll('section').forEach(s => observer.observe(s));
-
-    // Scroll reveal
-    const revealObs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-    
+</body>
+</html>
